@@ -21,9 +21,11 @@ const options = {
   onClose(selectedDates) {
     // console.log(selectedDates[0]);
     buttonStart.removeAttribute('disabled');
-    let requestedDate = selectedDates[0].getTime();
-    const timerTime = requestedDate - Date.now();
-    console.log(timerTime);
+    let requestDate = selectedDates[0];
+    requestedDate = selectedDates[0].getTime();
+
+    const timerTime = selectedDates[0].getTime() - Date.now();
+    console.log(convertMs(timerTime));
 
     if (timerTime <= 0) {
       Notiflix.Report.warning(
@@ -40,20 +42,24 @@ flatpickr('#datetime-picker', options);
 buttonStart.addEventListener('click', onStartButtonClick);
 
 const timer = {
-  intervalID: null,
+  intervalId: null,
+  countdownIsActive: false,
 
   onClose() {
-    const currentTime = Date.now();
-    const requestedDate = selectedDates[0].getTime();
+    if (this.countdownIsActive) {
+      return;
+    }
 
-    let countdown = requestedDate - currentTime;
+    this.countdownIsActive = true;
 
-    this.intervalID = setInterval(() => {
+    let countdown = requestedDate - Date.now();
+
+    intervalId = setInterval(() => {
       countdown = countdown -= 1000;
       const timerComponents = convertMs(countdown);
       updateTimeText(timerComponents);
       if (countdown <= 1000) {
-        stopInterval(this.intervalID);
+        stopInterval(this.intervalId);
       }
     }, 1000);
   },
@@ -66,7 +72,6 @@ function onStartButtonClick() {
 
 function stopInterval(interval) {
   clearInterval(interval);
-  console.log(`Interval with id ${interval} has stopped!`);
 }
 
 function convertMs(ms) {
