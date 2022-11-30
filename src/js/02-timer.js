@@ -56,12 +56,17 @@ const timer = {
 
     let countdown = requestDate - Date.now();
 
-    intervalId = setInterval(() => {
+    this.intervalId = setInterval(() => {
       countdown = countdown -= 1000;
       const timerComponents = convertMs(countdown);
       updateTimeText(timerComponents);
       if (countdown <= 1000) {
         stopInterval(this.intervalId);
+        Notiflix.Report.success(
+          'Time is over!',
+          'New benefit coming soon!',
+          'OK, I will wait...'
+        );
       }
     }, 1000);
   },
