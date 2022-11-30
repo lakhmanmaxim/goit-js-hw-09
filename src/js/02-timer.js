@@ -12,6 +12,8 @@ const secondsEl = document.querySelector('[data-seconds]');
 
 buttonStart.setAttribute('disabled', true);
 
+let requestDate;
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -21,8 +23,8 @@ const options = {
   onClose(selectedDates) {
     // console.log(selectedDates[0]);
     buttonStart.removeAttribute('disabled');
-    let requestDate = selectedDates[0];
-    requestedDate = selectedDates[0].getTime();
+
+    requestDate = selectedDates[0].getTime();
 
     const timerTime = selectedDates[0].getTime() - Date.now();
     console.log(convertMs(timerTime));
@@ -52,7 +54,7 @@ const timer = {
 
     this.countdownIsActive = true;
 
-    let countdown = requestedDate - Date.now();
+    let countdown = requestDate - Date.now();
 
     intervalId = setInterval(() => {
       countdown = countdown -= 1000;
